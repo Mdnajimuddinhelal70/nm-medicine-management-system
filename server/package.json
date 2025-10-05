@@ -1,0 +1,31 @@
+{
+  "name": "b9a12-assignment-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+<<<<<<< HEAD
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+=======
+>>>>>>> 1b25aa50ef1b94e02cce0c085eecdb5ccdf81d8f
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.8.0",
+    "stripe": "^16.8.0"
+<<<<<<< HEAD
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+=======
+>>>>>>> 1b25aa50ef1b94e02cce0c085eecdb5ccdf81d8f
+  }
+}
