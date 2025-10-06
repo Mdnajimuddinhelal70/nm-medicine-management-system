@@ -1,19 +1,10 @@
-<<<<<<< HEAD
 import { useContext, useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import Modal from "react-modal";
 import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../Providers/AuthProvider";
-=======
-import React, { useState, useEffect, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
-import Modal from "react-modal";
-import { FaEye } from "react-icons/fa";
-import { AuthContext } from "../../../Providers/AuthProvider";
-import Swal from "sweetalert2";
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
-import useAxiosSecure from "./../../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 Modal.setAppElement("#root");
 
@@ -24,15 +15,9 @@ const CategoryDetails = () => {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const axiosSecure = useAxiosSecure();
-<<<<<<< HEAD
 
   useEffect(() => {
     fetch("http://localhost:5000/myMedicine")
-=======
-   
-  useEffect(() => {
-    fetch("https://healthcare-management-server.vercel.app/myMedicine")
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
       .then((res) => res.json())
       .then((data) => {
         const filtered = data.filter((item) => item.category === categoryName);

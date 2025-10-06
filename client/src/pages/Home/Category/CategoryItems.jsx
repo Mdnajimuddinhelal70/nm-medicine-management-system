@@ -3,12 +3,7 @@ import "../../../styles.css";
 
 const CategoryItems = ({ item, index }) => {
   const { category, image, noOfMedicines } = item;
-<<<<<<< HEAD
-=======
 
-
-
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
   return (
     <Link to={`/categoryDetails/${category}`}>
       <div

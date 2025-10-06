@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import { createContext, useEffect, useState } from "react";
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -12,58 +8,59 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-<<<<<<< HEAD
 import { createContext, useEffect, useState } from "react";
-=======
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
 
 import app from "../firebase/firebase.config";
-import useAxiosPublic from './../hooks/useAxiosPublic';
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const auth = getAuth(app);
 
 export const AuthContext = createContext(null);
+
 const AuthProvider = ({ children }) => {
   const googleProvider = new GoogleAuthProvider();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxiosPublic();
+
+  // Create user with email & password
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
-<<<<<<< HEAD
-  const updateUserProfile = profileInfo => {
-    return updateProfile(auth.currentUser, profileInfo);
-=======
+
+  // Update user profile
   const updateUserProfile = (name, photo) => {
     return updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: photo,
     });
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
   };
 
+  // Login user with email & password
   const loginUser = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  // Google Sign-In
   const googleSignIn = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
+  // Logout
   const logOut = () => {
     setLoading(true);
     return signOut(auth);
   };
+
+  // Observe auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      // console.log("state changed", currentUser);
       setUser(currentUser);
       if (currentUser) {
-        //get token and store in the client
+        // Get JWT token and store in localStorage
         const userInfo = { email: currentUser.email };
         axiosPublic.post("/jwt", userInfo).then((res) => {
           if (res.data.token) {
@@ -71,13 +68,13 @@ const AuthProvider = ({ children }) => {
           }
         });
       } else {
-  
         localStorage.removeItem("access-token");
       }
       setLoading(false);
     });
+
     return () => unsubscribe();
-  }, []);
+  }, [axiosPublic]);
 
   const authUser = {
     user,
@@ -88,6 +85,7 @@ const AuthProvider = ({ children }) => {
     googleSignIn,
     logOut,
   };
+
   return (
     <AuthContext.Provider value={authUser}>{children}</AuthContext.Provider>
   );

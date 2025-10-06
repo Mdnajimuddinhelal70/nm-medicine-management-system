@@ -23,15 +23,12 @@
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "moment": "^2.30.1",
-    "react": "^18.3.1",
+    "react": "^19.0.0",
     "react-csv": "^2.2.2",
     "react-data-table-component": "^7.6.2",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.0.0",
     "react-helmet-async": "^2.0.5",
-<<<<<<< HEAD
     "react-hook-form": "^7.63.0",
-=======
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
     "react-modal": "^3.16.1",
@@ -45,8 +42,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.10",

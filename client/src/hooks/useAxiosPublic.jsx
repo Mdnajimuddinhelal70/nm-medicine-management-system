@@ -1,17 +1,17 @@
 import axios from "axios";
 
-
 const axiosPublic = axios.create({
-<<<<<<< HEAD
+  // Local development URL
   baseURL: "http://localhost:5000",
-  withCredentials: true,
+
+  // Production URL
+  // baseURL: "https://healthcare-management-server.vercel.app",
+
+  withCredentials: true, // send cookies if needed
 });
-=======
-    baseURL:'https://healthcare-management-server.vercel.app'
-})
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
+
 const useAxiosPublic = () => {
-    return axiosPublic
+  return axiosPublic;
 };
 
 export default useAxiosPublic;

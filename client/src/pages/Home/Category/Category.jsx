@@ -1,21 +1,11 @@
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import { Helmet } from "react-helmet-async";
 import CategoryItems from "./CategoryItems";
-=======
-import CategoryItems from "./CategoryItems";
-import { Helmet } from "react-helmet-async";
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
 
 const Category = () => {
   const [medicines, setMedicines] = useState([]);
-
   useEffect(() => {
-<<<<<<< HEAD
     fetch("http://localhost:5000/myMedicine")
-=======
-    fetch("https://healthcare-management-server.vercel.app/myMedicine")
->>>>>>> 476d3e1138ce68e51f91bfc76883b93e11f10e5c
       .then((res) => res.json())
       .then((data) => {
         const categoryData = data.reduce((acc, item) => {
