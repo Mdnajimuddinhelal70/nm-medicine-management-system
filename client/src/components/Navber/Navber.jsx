@@ -22,11 +22,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar shadow-lg p-4 bg-gradient-to-r from-pink-400 via-indigo-500 to-yellow-400 flex flex-wrap items-center justify-between">
+    <nav className="navbar shadow-lg p-4 flex flex-wrap items-center justify-between">
       <div className="flex items-center space-x-2">
         <img src={goodImg} alt="Logo" className="w-8 h-8 md:w-10 md:h-10" />
-        <Link to="/" className="p-1 md:p-2 rounded-md bg-gray-900">
-          <h1 className="text-base md:text-lg lg:text-2xl font-extrabold text-yellow-500 bg-clip-text text-transparent text-center">
+        <Link to="/" className="p-1 md:p-2 rounded-md">
+          <h1 className="text-base text-zinc-800 md:text-lg lg:text-2xl font-extrabold text-transparent text-center">
             HEALTHCARE MANAGEMENT
           </h1>
         </Link>

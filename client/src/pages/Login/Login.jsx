@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import { AuthContext } from "../../Providers/AuthProvider";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 
@@ -23,21 +23,11 @@ const Login = () => {
 
     loginUser(email, password)
       .then(() => {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "User Login successful",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        toast.success("Logged in successfull.");
         navigate(from, { replace: true });
       })
       .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Login Failed",
-          text: error.message || "Something went wrong!",
-        });
+        toast.error("Something went wrong!");
       });
   };
 
@@ -55,28 +45,14 @@ const Login = () => {
         axiosPublic
           .post("/users", userInfo)
           .then(() => {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Logged in successfully!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
+            toast.success("Logged in successfull.");
           })
           .catch(() => {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Something went wrong! Please try again.",
-            });
+            toast.error("Something went wrong! Please try again.");
           });
       })
       .catch(() => {
-        Swal.fire({
-          icon: "error",
-          title: "Google Sign-in Failed",
-          text: "Please try again!",
-        });
+        toast.error("Google Login Failed");
       });
   };
 

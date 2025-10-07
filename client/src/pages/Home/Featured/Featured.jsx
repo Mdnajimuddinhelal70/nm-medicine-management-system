@@ -6,7 +6,7 @@ const Featured = () => {
   return (
     <>
       <div className="flex items-center justify-center mt-10 px-4 md:px-8 lg:px-16">
-        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-green-900 w-full md:w-2/3 lg:w-1/2">
+        <h1 className="text-center text-2xl sm:text-2xl md:text-2xl lg:text-4xl font-bold text-green-900 w-full md:w-2/3 lg:w-1/2">
           Boost Your Well-Being at Good Health Chiropractic & Acupuncture
         </h1>
       </div>
