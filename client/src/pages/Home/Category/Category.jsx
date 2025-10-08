@@ -29,14 +29,23 @@ const Category = () => {
       <Helmet>
         <title>Health || Cart</title>
       </Helmet>
-      <h1 className="text-4xl font-bold ml-16 mt-16 text-fuchsia-900">
-        Explore Our Category-wise Medicine
-      </h1>
-      <div className="container md:grid grid-cols-3 gap-4 mt-8 mb-10 mx-auto">
-        {medicines.map((item, index) => (
-          <CategoryItems key={index} item={item} index={index} />
-        ))}
-      </div>
+
+      {medicines.length > 0 ? (
+        <>
+          <h1 className="text-4xl font-bold ml-16 mt-16 text-fuchsia-900">
+            Explore Our Category-wise Medicine
+          </h1>
+          <div className="container md:grid grid-cols-3 gap-4 mt-8 mb-10 mx-auto">
+            {medicines.map((item, index) => (
+              <CategoryItems key={index} item={item} index={index} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="text-center text-lg text-gray-600 mt-10">
+          <p>No medicines found</p>
+        </div>
+      )}
     </>
   );
 };

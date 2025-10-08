@@ -82,15 +82,17 @@ async function run() {
       res.send(users);
     });
 
-    app.get("/users/admin/:email", verifyToken, async (req, res) => {
+    app.get("/user/admin/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
-      if (email !== req.decoded.email)
-        return res.status(403).send({ message: "Unauthorized access" });
       const user = await usersCollection.findOne({ email });
-      res.send({ admin: user?.role === "admin" });
+
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+      res.send({ role: user.role });
     });
 
-    app.patch("/users/role/:id", verifyToken, verifyAdmin, async (req, res) => {
+    app.patch("/user/role/:id", verifyToken, verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const { role } = req.body;
       const validRoles = ["admin", "seller", "user"];
@@ -125,10 +127,23 @@ async function run() {
       res.send(medicines);
     });
 
+    // app.post("/myMedicine", async (req, res) => {
+    //   const medicineData = req.body;
+    //   const result = await medicineCollection.insertOne(medicineData);
+    //   res.send(result);
+    // });
     app.post("/myMedicine", async (req, res) => {
-      const medicineData = req.body;
-      const result = await medicineCollection.insertOne(medicineData);
-      res.send(result);
+      try {
+        const medicineData = req.body;
+        // sellerEmail অবশ্যই থাকতে হবে
+        if (!medicineData.sellerEmail) {
+          return res.status(400).send({ error: "Seller email is required" });
+        }
+        const result = await medicineCollection.insertOne(medicineData);
+        res.send(result);
+      } catch (error) {
+        res.status(500).send({ error: "Failed to add medicine" });
+      }
     });
 
     app.get("/myMedicineUp", async (req, res) => {
@@ -235,6 +250,26 @@ async function run() {
         .toArray();
       res.send(payments);
     });
+    app.get("/payment-history", async (req, res) => {
+      const email = req.query.email;
+
+      try {
+        const payments = await paymentCollection.find({ email }).toArray();
+        res.send(payments);
+      } catch (error) {
+        res.status(500).send({ message: "Server error", error });
+      }
+    });
+    // Get payment history by sellerEmail or buyerEmail
+    app.get("/payments", async (req, res) => {
+      const sellerEmail = req.query.sellerEmail;
+      let query = {};
+      if (sellerEmail) {
+        query = { email: sellerEmail }; // এখানে field নাম adjust করো
+      }
+      const result = await paymentCollection.find(query).toArray();
+      res.send(result);
+    });
 
     app.post("/create-payment-intent", async (req, res) => {
       const { price } = req.body;
@@ -252,6 +287,38 @@ async function run() {
       } catch (error) {
         res.status(500).send({ error: "Payment processing failed" });
       }
+    });
+
+    // ✅ Delete a payment by ID
+    app.delete("/payments/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await paymentCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // ✅ Update payment status (for example: approve/reject)
+    app.patch("/payments/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedData = req.body;
+      const query = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: updatedData,
+      };
+      const result = await paymentCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
+
+    app.get("/advertisements", verifyToken, async (req, res) => {
+      const email = req.query.sellerEmail;
+      const query = email ? { sellerEmail: email } : {};
+      const result = await advertisementCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.post("/advertisements", verifyToken, async (req, res) => {
+      const adData = req.body;
+      const result = await advertisementCollection.insertOne(adData);
+      res.send(result);
     });
 
     console.log("Connected to MongoDB successfully!");
