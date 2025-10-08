@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useContext, useState } from "react";
+import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import { AuthContext } from "../../Providers/AuthProvider";
+import RoleSelection from "../../components/SocialLogin/QuickLogin";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
@@ -51,31 +52,20 @@ const Register = () => {
                 axiosPublic.post("/users", userInfo).then((res) => {
                   if (res.data.insertedId) {
                     navigate(from, { replace: true });
-                    Swal.fire({
-                      position: "top-end",
-                      icon: "success",
-                      title: "User Registration Successful",
-                      showConfirmButton: false,
-                      timer: 1500,
-                    });
+                    toast.success("User Registration Successful");
                   }
                 });
               })
               .catch((error) => {
-                console.error("Profile update error:", error.message);
+                toast.error("Profile update error:", error.message);
               });
           })
           .catch((error) => {
-            console.error("User creation error:", error.message);
+            toast.error("User creation error:", error.message);
           });
       }
     } catch (error) {
-      console.error("Image upload error:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Image upload failed. Please try again!",
-      });
+      toast.error("Image upload failed. Please try again!");
     }
   };
 
@@ -92,32 +82,16 @@ const Register = () => {
           .post("/users", userInfo)
           .then((res) => {
             if (res.data.insertedId || res.data.acknowledged) {
-              Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Google Sign-In Successful",
-                showConfirmButton: false,
-                timer: 1500,
-              });
+              toast.success("Google Sign-In Successful");
               navigate(from, { replace: true });
             }
           })
           .catch((error) => {
-            console.error("User info post error:", error.message);
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Something went wrong while saving user data.",
-            });
+            toast.error("Something went wrong while saving user data.");
           });
       })
       .catch((error) => {
-        console.error("Google Sign-In error:", error.message);
-        Swal.fire({
-          icon: "error",
-          title: "Google Sign-In Failed",
-          text: "Please try again!",
-        });
+        toast.error("Google Sign-In Failed. Try again!", error.message);
       });
   };
 
@@ -128,6 +102,7 @@ const Register = () => {
           <h2 className="text-xl font-bold text-center mb-6 text-white">
             User Registration
           </h2>
+          <RoleSelection />
           <form onSubmit={handleRegister} className="space-y-4 px-6">
             {/* Username */}
             <div className="form-control">

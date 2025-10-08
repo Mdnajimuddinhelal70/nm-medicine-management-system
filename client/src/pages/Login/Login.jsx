@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
+import RoleSelection from "../../components/SocialLogin/QuickLogin";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Login = () => {
@@ -39,7 +40,6 @@ const Login = () => {
         const userInfo = {
           name: result.user?.displayName,
           email: result.user?.email,
-          role: "admin",
         };
 
         axiosPublic
@@ -67,6 +67,7 @@ const Login = () => {
           <h2 className="text-xl font-bold text-center mb-6 text-gray-800">
             Welcome Back!
           </h2>
+          <RoleSelection />
 
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email Input */}

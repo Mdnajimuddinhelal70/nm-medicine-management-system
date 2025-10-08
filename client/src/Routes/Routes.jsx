@@ -1,29 +1,29 @@
 import { createBrowserRouter } from "react-router-dom";
-import Main from "../Main/Main";
-import Home from "../pages/Home/Home";
-import Login from "../pages/Login/Login";
-import Register from "../pages/Register/Register";
-import UpdateProfile from "../components/UpdateProfile/UpdateProfile";
-import CategoryDetails from "../pages/Home/Category/CategoryDetails";
-import Carts from "../pages/Carts/Carts";
-import ShopPage from "../pages/ShopPage/ShopPage";
-import Payment from "../pages/CheckoutForm/Payment";
 import InvoicePage from "../components/Invoice/InvoicePage";
+import NotFound from "../components/NotFound/NotFound";
+import UpdateProfile from "../components/UpdateProfile/UpdateProfile";
 import Dashboard from "../layout/Dashboard";
+import Main from "../Main/Main";
+import About from "../pages/About/About";
+import Carts from "../pages/Carts/Carts";
+import Payment from "../pages/CheckoutForm/Payment";
 import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
-import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
+import ManageBanner from "../pages/Dashboard/ManageBanner/ManageBanner";
 import ManageCategory from "../pages/Dashboard/ManageCategory/ManageCategory";
+import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
 import PaymentManagement from "../pages/Dashboard/PaymentManagement/PaymentManagement";
 import SalesReport from "../pages/Dashboard/SalesReport/SalesReport";
-import ManageBanner from "../pages/Dashboard/ManageBanner/ManageBanner";
-import SellerHome from "../pages/Dashboard/SellerPages/SellerHome";
 import ManageMedicine from "../pages/Dashboard/SellerPages/ManageMedicine";
 import PaymentHistory from "../pages/Dashboard/SellerPages/PaymentHistory";
 import SellerAdvertise from "../pages/Dashboard/SellerPages/SellerAdvertise";
+import SellerHome from "../pages/Dashboard/SellerPages/SellerHome";
+import CategoryDetails from "../pages/Home/Category/CategoryDetails";
+import Home from "../pages/Home/Home";
+import Login from "../pages/Login/Login";
+import Register from "../pages/Register/Register";
+import ShopPage from "../pages/ShopPage/ShopPage";
 import UserHome from "../pages/UserHome/UserHome";
-import NotFound from "../components/NotFound/NotFound";
 import PrivateRoute from "./PrivateRoute";
-import About from "../pages/About/About";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +39,7 @@ export const router = createBrowserRouter([
         path: "/login",
         element: <Login />,
       },
+
       {
         path: "/register",
         element: <Register />,
@@ -86,7 +87,7 @@ export const router = createBrowserRouter([
     element: <Dashboard />,
     children: [
       {
-       path: 'adminHome',
+        path: "adminHome",
         element: <AdminHome />,
       },
       {
@@ -110,7 +111,6 @@ export const router = createBrowserRouter([
         element: <ManageBanner />,
       },
 
-      
       // Seller list from here
       {
         path: "sellerHome",
