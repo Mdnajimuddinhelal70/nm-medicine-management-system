@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import InvoicePage from "../components/Invoice/InvoicePage";
-import NotFound from "../components/NotFound/NotFound";
+// import NotFound from "../components/NotFound/NotFound";
 import UpdateProfile from "../components/UpdateProfile/UpdateProfile";
 import Dashboard from "../layout/Dashboard";
 import Main from "../Main/Main";
@@ -28,7 +28,7 @@ import PrivateRoute from "./PrivateRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
-    errorElement: <NotFound />,
+    // errorElement: <NotFound />,
     element: <Main />,
     children: [
       {

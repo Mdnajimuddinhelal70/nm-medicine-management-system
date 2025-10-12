@@ -1,11 +1,10 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useContext, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useCart from "../../hooks/useCart";
 import { AuthContext } from "../../Providers/AuthProvider";
-
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
@@ -38,7 +37,7 @@ const CheckoutForm = () => {
           setClientSecret(res.data.clientSecret);
         })
         .catch((err) => {
-          console.error("Payment Intent creation error:", err);
+          toast.error("Payment Intent creation error:", err);
         });
     }
   }, [axiosSecure, totalPrice]);
@@ -91,6 +90,7 @@ const CheckoutForm = () => {
 
       const payment = {
         buyerEmail: user.email,
+        sellerEmail: cart[0]?.sellerEmail || "unknown",
         price: totalPrice,
         name: firstItemName,
         transactionId: paymentIntent.id,
@@ -106,17 +106,11 @@ const CheckoutForm = () => {
         refetch();
 
         if (res.data.paymentResult?.insertedId) {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Thanks, your payment was successful",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          toast.success("Thanks, your payment was successful");
           navigate("/invoice");
         }
       } catch (error) {
-        console.error("Error saving payment:", error);
+        toast.error("Error saving payment:", error);
       }
     }
 

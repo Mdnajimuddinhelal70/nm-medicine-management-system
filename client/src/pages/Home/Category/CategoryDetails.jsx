@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaEye } from "react-icons/fa";
 import Modal from "react-modal";
 import { Link, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
@@ -40,7 +40,8 @@ const CategoryDetails = () => {
     if (user && user.email) {
       const cartItem = {
         medicineId: medicine._id,
-        email: user.email,
+        buyerEmail: user.email,
+        sellerEmail: medicine?.sellerEmail,
         company: medicine.company,
         image: medicine.image,
         price: medicine.price,
@@ -51,29 +52,14 @@ const CategoryDetails = () => {
         .post("/carts", cartItem)
         .then((res) => {
           if (res.data.insertedId) {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: `${medicine.name} added to the cart`,
-              showConfirmButton: false,
-              timer: 1500,
-            });
+            toast.success(`${medicine.name} added to the cart`);
           }
         })
         .catch((error) => {
-          console.error("Error adding item to cart:", error);
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Failed to add the item to the cart. Please try again.",
-          });
+          toast.error("Failed to add the item to the cart. Please try again.");
         });
     } else {
-      Swal.fire({
-        icon: "warning",
-        title: "Not Logged In",
-        text: "You need to log in to add items to the cart.",
-      });
+      toast.error("Not Logged In, Pleas try after login!");
     }
   };
 

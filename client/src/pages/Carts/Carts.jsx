@@ -1,8 +1,8 @@
-import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useCart from "../../hooks/useCart";
-import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 
 const Carts = () => {
   const [cart, isLoading, refetch] = useCart();
@@ -17,21 +17,14 @@ const Carts = () => {
   const handleClear = (id) => {
     axiosSecure.delete(`/carts/${id}`).then((res) => {
       if (res.data.deletedCount > 0) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Your item has been cleared",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        toast.success("Cleared!");
         refetch();
       }
     });
   };
 
   const handleQuantityChange = (id, quantity) => {
-    axiosSecure.patch(`/carts/${id}`, { quantity })
-    .then((res) => {
+    axiosSecure.patch(`/carts/${id}`, { quantity }).then((res) => {
       if (res.data.modifiedCount > 0) {
         refetch();
       }

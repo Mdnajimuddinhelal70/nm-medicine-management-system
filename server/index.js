@@ -34,10 +34,11 @@ async function run() {
       .collection("myMedicine");
     const usersCollection = client.db("medicinesDb").collection("users");
     const cartsCollection = client.db("medicinesDb").collection("carts");
-    const paymentCollection = client.db("medicinesDb").collection("payments");
     const advertisementCollection = client
       .db("medicinesDb")
       .collection("advertise");
+    const paymentCollection = client.db("medicinesDb").collection("payments");
+    const ordersCollection = client.db("medicinesDb").collection("orders");
 
     // JWT Token Generation
     app.post("/jwt", (req, res) => {
@@ -206,6 +207,31 @@ async function run() {
         { $set: { quantity } }
       );
       res.send(result);
+    });
+
+    // Seller apis
+    app.get("/seller-stats", async (req, res) => {
+      const email = req.query.email;
+
+      // এখানে পেমেন্ট কালেকশন ব্যবহার করো
+      const payments = await paymentCollection
+        .find({ sellerEmail: email })
+        .toArray();
+
+      // যদি sellerEmail এখনো না পাঠাও, তাহলে buyerEmail দিয়েও চেক করতে পারো
+      // const payments = await paymentCollection.find({ buyerEmail: email }).toArray();
+
+      const totalRevenue = payments.reduce((sum, p) => sum + (p.price || 0), 0);
+      const totalPaid = payments
+        .filter((p) => p.status === "paid")
+        .reduce((sum, p) => sum + (p.price || 0), 0);
+      const totalPending = totalRevenue - totalPaid;
+
+      res.send({
+        revenue: totalRevenue,
+        totalPaid,
+        totalPending,
+      });
     });
 
     // PAYMENT API

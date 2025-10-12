@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
@@ -16,6 +17,10 @@ const ManageMedicine = () => {
     price: "",
     quantity: "",
     image: "",
+    type: "",
+    dosage: "",
+    noOfMedicines: "",
+    company: "",
   });
   const [file, setFile] = useState(null);
 
@@ -56,7 +61,7 @@ const ManageMedicine = () => {
       const newMedicine = { ...form, image: imageUrl, sellerEmail: user.email };
       await axiosPublic.post("/myMedicine", newMedicine);
 
-      Swal.fire("Success!", "Medicine added!", "success");
+      toast.success("Success!", "Medicine added!", "success");
       queryClient.invalidateQueries(["myMedicine", user?.email]);
       setForm({
         name: "",
@@ -93,16 +98,11 @@ const ManageMedicine = () => {
         <table className="min-w-full bg-white rounded-lg shadow-md">
           <thead className="bg-blue-600 text-white">
             <tr>
-              <th className="py-2 px-3">Name</th>
               <th className="py-2 px-3">Image</th>
+              <th className="py-2 px-3">Name</th>
               <th className="py-2 px-3">Category</th>
               <th className="py-2 px-3">Price</th>
-              <th className="py-2 px-3">description</th>
-              <th className="py-2 px-3">type</th>
-              <th className="py-2 px-3">dosage</th>
-              <th className="py-2 px-3">noOfMedicines</th>
-              <th className="py-2 px-3">company</th>
-              <th className="py-2 px-3">quantity</th>
+              <th className="py-2 px-3">Quantity</th>
             </tr>
           </thead>
           <tbody>
@@ -117,7 +117,7 @@ const ManageMedicine = () => {
                 </td>
                 <td className="p-2">{m.name}</td>
                 <td className="p-2">{m.category}</td>
-                <td className="p-2">${m.price}</td>
+                <td className="p-2">{m.price}</td>
                 <td className="p-2">{m.quantity}</td>
               </tr>
             ))}
@@ -159,11 +159,7 @@ const ManageMedicine = () => {
                   required
                 />
               ))}
-              <input
-                type="file"
-                onChange={(e) => setFile(e.target.files[0])}
-                required
-              />
+              <input type="file" onChange={(e) => setFile(e.target.files[0])} />
               <div className="flex justify-end gap-2">
                 <button
                   type="submit"
