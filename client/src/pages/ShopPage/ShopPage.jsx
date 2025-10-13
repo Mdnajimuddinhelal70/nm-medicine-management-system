@@ -118,8 +118,11 @@ const ShopPage = () => {
                   <button
                     onClick={() => handleSelect(medicine)}
                     className="btn btn-sm bg-fuchsia-500 text-white"
+                    disabled={user?.email === medicine.sellerEmail}
                   >
-                    Select
+                    {user?.email === medicine.sellerEmail
+                      ? "Your Product"
+                      : "Select"}
                   </button>
                 </td>
               </tr>

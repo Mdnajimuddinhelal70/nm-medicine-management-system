@@ -38,7 +38,6 @@ async function run() {
       .db("medicinesDb")
       .collection("advertise");
     const paymentCollection = client.db("medicinesDb").collection("payments");
-    const ordersCollection = client.db("medicinesDb").collection("orders");
 
     // JWT Token Generation
     app.post("/jwt", (req, res) => {
@@ -72,11 +71,6 @@ async function run() {
       next();
     };
 
-    app.get("/advertise", async (req, res) => {
-      const result = await advertisementCollection.find().toArray();
-      res.send(result);
-    });
-
     // USERS API
     app.get("/users", verifyToken, verifyAdmin, async (req, res) => {
       const users = await usersCollection.find().toArray();
@@ -99,10 +93,19 @@ async function run() {
       const validRoles = ["admin", "seller", "user"];
       if (!validRoles.includes(role))
         return res.status(400).send({ message: "Invalid role" });
+
+      const user = await usersCollection.findOne({ _id: new ObjectId(id) });
+      if (user.email === req.decoded.email) {
+        return res
+          .status(403)
+          .send({ message: "You cannot change your own role!" });
+      }
+
       const result = await usersCollection.updateOne(
         { _id: new ObjectId(id) },
         { $set: { role } }
       );
+
       res.send(result);
     });
 
@@ -128,11 +131,6 @@ async function run() {
       res.send(medicines);
     });
 
-    // app.post("/myMedicine", async (req, res) => {
-    //   const medicineData = req.body;
-    //   const result = await medicineCollection.insertOne(medicineData);
-    //   res.send(result);
-    // });
     app.post("/myMedicine", async (req, res) => {
       try {
         const medicineData = req.body;
@@ -213,12 +211,10 @@ async function run() {
     app.get("/seller-stats", async (req, res) => {
       const email = req.query.email;
 
-      // এখানে পেমেন্ট কালেকশন ব্যবহার করো
       const payments = await paymentCollection
         .find({ sellerEmail: email })
         .toArray();
 
-      // যদি sellerEmail এখনো না পাঠাও, তাহলে buyerEmail দিয়েও চেক করতে পারো
       // const payments = await paymentCollection.find({ buyerEmail: email }).toArray();
 
       const totalRevenue = payments.reduce((sum, p) => sum + (p.price || 0), 0);
@@ -255,12 +251,46 @@ async function run() {
 
     app.post("/payments", async (req, res) => {
       const payment = req.body;
-      const paymentResult = await paymentCollection.insertOne(payment);
+
+      const paymentInfo = {
+        buyerEmail: payment.buyerEmail,
+        sellerEmail: payment.sellerEmail,
+        transactionId: payment.transactionId,
+        price: payment.price,
+        status: payment.status || "paid",
+        date: new Date(),
+        cartIds: payment.cartIds,
+      };
+
+      const paymentResult = await paymentCollection.insertOne(paymentInfo);
       const query = {
         _id: { $in: payment.cartIds.map((id) => new ObjectId(id)) },
       };
       const deleteResult = await cartsCollection.deleteMany(query);
       res.send({ paymentResult, deleteResult });
+    });
+
+    // Payment history
+    app.get("/payment-history", async (req, res) => {
+      const email = req.query.email;
+      if (!email) return res.status(400).send({ message: "Email is required" });
+
+      const query = { buyerEmail: email };
+      const payments = await paymentCollection.find(query).toArray();
+
+      const paidTotal = payments
+        .filter((p) => p.status === "paid")
+        .reduce((sum, p) => sum + parseFloat(p.price), 0);
+
+      const pendingTotal = payments
+        .filter((p) => p.status === "pending")
+        .reduce((sum, p) => sum + parseFloat(p.price), 0);
+
+      res.send({
+        paymentHistory: payments,
+        paidTotal,
+        pendingTotal,
+      });
     });
 
     app.get("/payments/:email", async (req, res) => {
@@ -276,43 +306,12 @@ async function run() {
         .toArray();
       res.send(payments);
     });
-    app.get("/payment-history", async (req, res) => {
-      const email = req.query.email;
 
-      try {
-        const payments = await paymentCollection.find({ email }).toArray();
-        res.send(payments);
-      } catch (error) {
-        res.status(500).send({ message: "Server error", error });
-      }
-    });
-    // Get payment history by sellerEmail or buyerEmail
     app.get("/payments", async (req, res) => {
       const sellerEmail = req.query.sellerEmail;
-      let query = {};
-      if (sellerEmail) {
-        query = { email: sellerEmail }; // এখানে field নাম adjust করো
-      }
+      const query = sellerEmail ? { sellerEmail: sellerEmail } : {};
       const result = await paymentCollection.find(query).toArray();
       res.send(result);
-    });
-
-    app.post("/create-payment-intent", async (req, res) => {
-      const { price } = req.body;
-      if (typeof price !== "number" || price <= 0) {
-        return res.status(400).send({ error: "Invalid price value" });
-      }
-      const amount = Math.round(price * 100);
-      try {
-        const paymentIntent = await stripe.paymentIntents.create({
-          amount: amount,
-          currency: "usd",
-          payment_method_types: ["card"],
-        });
-        res.send({ clientSecret: paymentIntent.client_secret });
-      } catch (error) {
-        res.status(500).send({ error: "Payment processing failed" });
-      }
     });
 
     // ✅ Delete a payment by ID
@@ -344,6 +343,11 @@ async function run() {
     app.post("/advertisements", verifyToken, async (req, res) => {
       const adData = req.body;
       const result = await advertisementCollection.insertOne(adData);
+      res.send(result);
+    });
+
+    app.get("/advertise", async (req, res) => {
+      const result = await advertisementCollection.find().toArray();
       res.send(result);
     });
 

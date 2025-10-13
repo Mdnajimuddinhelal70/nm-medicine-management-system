@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { Dialog, Listbox } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { FaEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { Dialog, Listbox } from "@headlessui/react";
-import { Helmet } from "react-helmet-async";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const roles = ["admin", "seller", "user"];
 
@@ -24,7 +24,7 @@ const ManageUsers = () => {
   const handleRoleUpdate = async () => {
     if (selectedUser && selectedRole) {
       axiosSecure
-        .patch(`/users/role/${selectedUser._id}`, { role: selectedRole })
+        .patch(`/user/role/${selectedUser._id}`, { role: selectedRole })
         .then((res) => {
           if (res.data.modifiedCount > 0) {
             refetch();
@@ -49,27 +49,47 @@ const ManageUsers = () => {
       </Helmet>
       <div className="flex flex-col md:flex-row md:justify-between my-4">
         <h2 className="text-lg md:text-2xl font-semibold">All Users</h2>
-        <h2 className="text-base md:text-2xl font-medium">Total users: {users.length}</h2>
+        <h2 className="text-base md:text-2xl font-medium">
+          Total users: {users.length}
+        </h2>
       </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">#</th>
-              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">Name</th>
-              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">Email</th>
-              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">Role</th>
-              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">Actions</th>
+              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">
+                #
+              </th>
+              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">
+                Name
+              </th>
+              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">
+                Email
+              </th>
+              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">
+                Role
+              </th>
+              <th className="px-2 py-1 md:px-4 md:py-2 text-left text-xs md:text-sm font-medium text-gray-600">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
             {users?.map((user, index) => (
               <tr key={user._id} className="border-b">
-                <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">{index + 1}</td>
-                <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">{user.name}</td>
-                <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">{user.email}</td>
-                <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">{user.role}</td>
+                <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">
+                  {index + 1}
+                </td>
+                <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">
+                  {user.name}
+                </td>
+                <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">
+                  {user.email}
+                </td>
+                <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">
+                  {user.role}
+                </td>
                 <td className="px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm">
                   <button
                     onClick={() => {
@@ -78,7 +98,7 @@ const ManageUsers = () => {
                     }}
                     className="btn btn-md bg-slate-600 text-white flex items-center space-x-2"
                   >
-                    <FaEdit className="text-white text-base md:text-xl" /> 
+                    <FaEdit className="text-white text-base md:text-xl" />
                     <span className="hidden md:inline">Update Role</span>
                   </button>
                 </td>

@@ -107,8 +107,11 @@ const CategoryDetails = () => {
                 <button
                   className="text-orange-400 text-xl"
                   onClick={() => handleAddToCart(medicine)}
+                  disabled={user?.email === medicine.sellerEmail}
                 >
-                  Select
+                  {user?.email === medicine.sellerEmail
+                    ? "Your Product"
+                    : "Select"}
                 </button>
               </td>
             </tr>
