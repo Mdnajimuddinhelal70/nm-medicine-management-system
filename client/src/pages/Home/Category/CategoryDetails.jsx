@@ -41,6 +41,7 @@ const CategoryDetails = () => {
       const cartItem = {
         medicineId: medicine._id,
         buyerEmail: user.email,
+        email: user.email,
         sellerEmail: medicine?.sellerEmail,
         company: medicine.company,
         image: medicine.image,

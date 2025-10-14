@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
+import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { Helmet } from "react-helmet-async";
 
 const PaymentManagement = () => {
   const axiosSecure = useAxiosSecure();
@@ -22,7 +23,7 @@ const PaymentManagement = () => {
     return (
       <div className="flex justify-center items-center h-64">
         <p className="text-lg font-semibold text-gray-600 animate-pulse">
-        <span className="loading loading-bars loading-lg"></span>
+          <span className="loading loading-bars loading-lg"></span>
         </p>
       </div>
     );
@@ -40,14 +41,14 @@ const PaymentManagement = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure
-          .patch(`/payments/${id}`, { status: "paid" }) 
+          .patch(`/payments/${id}`, { status: "paid" })
           .then(() => {
             Swal.fire(
               "Updated!",
               "The payment has been marked as paid.",
               "success"
             );
-            refetch(); 
+            refetch();
           })
           .catch((error) => {
             Swal.fire(
@@ -75,6 +76,7 @@ const PaymentManagement = () => {
           .delete(`/payments/${id}`)
           .then(() => {
             Swal.fire("Reject!", "The payment has been deleted.", "success");
+            toast.success("Rejected");
             refetch();
           })
           .catch((error) => {
@@ -101,9 +103,15 @@ const PaymentManagement = () => {
           <thead>
             <tr className="bg-gray-800 text-white text-left">
               <th className="py-2 sm:py-3 px-2 sm:px-4 font-semibold">Email</th>
-              <th className="py-2 sm:py-3 px-2 sm:px-4 font-semibold">Amount</th>
-              <th className="py-2 sm:py-3 px-2 sm:px-4 font-semibold">Status</th>
-              <th className="py-2 sm:py-3 px-2 sm:px-4 font-semibold">Actions</th>
+              <th className="py-2 sm:py-3 px-2 sm:px-4 font-semibold">
+                Amount
+              </th>
+              <th className="py-2 sm:py-3 px-2 sm:px-4 font-semibold">
+                Status
+              </th>
+              <th className="py-2 sm:py-3 px-2 sm:px-4 font-semibold">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>

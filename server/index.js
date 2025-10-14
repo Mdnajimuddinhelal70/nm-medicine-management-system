@@ -182,12 +182,22 @@ async function run() {
 
     // CART API
     app.post("/carts", async (req, res) => {
+      const cartItem = req.body;
+      if (!cartItem.email) {
+        return res.status(400).send({ error: "Email is required" });
+      }
       const result = await cartsCollection.insertOne(req.body);
       res.send(result);
     });
 
     app.get("/carts", async (req, res) => {
-      const carts = await cartsCollection.find().toArray();
+      const email = req.query.email;
+
+      if (!email) {
+        return res.status(400).send({ error: "Email is required" });
+      }
+
+      const carts = await cartsCollection.find({ email: email }).toArray();
       res.send(carts);
     });
 
