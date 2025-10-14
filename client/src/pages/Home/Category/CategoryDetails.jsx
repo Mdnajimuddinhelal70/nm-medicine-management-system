@@ -17,10 +17,12 @@ const CategoryDetails = () => {
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    fetch("http://localhost:5000/myMedicine")
-      .then((res) => res.json())
-      .then((data) => {
-        const filtered = data.filter((item) => item.category === categoryName);
+    axiosSecure
+      .get("/myMedicine")
+      .then((res) => {
+        const filtered = res.data.filter(
+          (item) => item.category === categoryName
+        );
         setFilteredMedicines(filtered);
       })
       .catch((error) => console.error("Error fetching data:", error));

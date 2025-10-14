@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "b9-a12-project"
-  }
+    "default": "medicine-management-78803"
+  },
+  "targets": {},
+  "etags": {}
 }

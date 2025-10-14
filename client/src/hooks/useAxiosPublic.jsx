@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosPublic = axios.create({
   // Local development URL
-  baseURL: "http://localhost:5000",
+  baseURL: "https://medicine-management-server.vercel.app",
 
   // Production URL
   // baseURL: "https://healthcare-management-server.vercel.app",

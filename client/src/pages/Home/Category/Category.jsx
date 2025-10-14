@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import CategoryItems from "./CategoryItems";
 
 const Category = () => {
   const [medicines, setMedicines] = useState([]);
+  const axiosPublic = useAxiosPublic();
+
   useEffect(() => {
-    fetch("http://localhost:5000/myMedicine")
-      .then((res) => res.json())
-      .then((data) => {
+    axiosPublic
+      .get("/myMedicine")
+      .then((res) => {
+        const data = res.data;
         const categoryData = data.reduce((acc, item) => {
           const found = acc.find((cat) => cat.category === item.category);
           if (found) {
@@ -21,8 +25,11 @@ const Category = () => {
           return acc;
         }, []);
         setMedicines(categoryData);
+      })
+      .catch((error) => {
+        console.error("Error fetching medicines:", error);
       });
-  }, []);
+  }, [axiosPublic]);
 
   return (
     <>
