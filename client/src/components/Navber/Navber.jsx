@@ -27,9 +27,11 @@ const Navbar = () => {
         <img src={goodImg} alt="Logo" className="w-8 h-8 md:w-10 md:h-10" />
         <Link to="/" className="p-1 md:p-2 rounded-md">
           <h1 className="text-base text-zinc-800 md:text-lg lg:text-2xl font-extrabold text-transparent text-center">
-            HEALTHCARE MANAGEMENT
+            MEDICINE MANAGEMENT
           </h1>
         </Link>
+
+        <h3 className="text-emerald-400">{user?.email}</h3>
       </div>
 
       <div className="hidden lg:flex navbar-center">

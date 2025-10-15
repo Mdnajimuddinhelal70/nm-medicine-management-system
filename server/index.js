@@ -112,13 +112,6 @@ async function run() {
       res.send(result);
     });
 
-    app.post("/jwt", (req, res) => {
-      const user = req.body;
-      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "1h",
-      });
-      res.send({ token });
-    });
     app.post("/users", async (req, res) => {
       const user = req.body;
       const existingUser = await usersCollection.findOne({ email: user.email });
@@ -137,7 +130,6 @@ async function run() {
     app.post("/myMedicine", async (req, res) => {
       try {
         const medicineData = req.body;
-        // sellerEmail অবশ্যই থাকতে হবে
         if (!medicineData.sellerEmail) {
           return res.status(400).send({ error: "Seller email is required" });
         }
